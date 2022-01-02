@@ -1,0 +1,25 @@
+{
+  "name": "amintado/yii-lib-upload-manager",
+  "description": "Library for Yii2 framework and manage/edit uploaded images/files",
+  "license": "BSD-3-Clause",
+  "autoload": {
+    "psr-4": {
+      "YiiMan\\LibUploadManager\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "YiiMan",
+      "email": "info@yiiman.ir"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "php": ">=7.2",
+    "yiisoft/yii2": "2.*",
+    "ext-fileinfo": "*",
+    "yiiman/yii-module-setting": "0.0.*",
+    "ext-json": "*",
+    "ext-gd": "*"
+  }
+}
