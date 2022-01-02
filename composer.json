@@ -1,5 +1,5 @@
 {
-  "name": "amintado/yii-lib-upload-manager",
+  "name": "yiiman/yii-lib-upload-manager",
   "description": "Library for Yii2 framework and manage/edit uploaded images/files",
   "license": "BSD-3-Clause",
   "autoload": {
