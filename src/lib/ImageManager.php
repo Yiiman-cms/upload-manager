@@ -106,7 +106,7 @@ class ImageManager
     {
         if (is_string($this->config['driver'])) {
             $drivername = ucfirst($this->config['driver']);
-            $driverclass = sprintf('system\\lib\\imageManager\\%s\\Driver', $drivername);
+            $driverclass = sprintf('YiiMan\\LibUploadManager\\lib\\imageManager\\%s\\Driver', $drivername);
  
  
  
