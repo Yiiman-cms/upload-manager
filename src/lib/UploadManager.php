@@ -29,9 +29,9 @@ class UploadManager
     private $imageManager;
     public function __construct()
     {
-        $this->options=new Options();
+
         $this->imageManager=new ImageManager();
-        $this->uploadDir = $this->options->UploadDir . $this->dir;
+        $this->uploadDir = Yii::$app->Options->UploadDir . $this->dir;
     }
 
     /**
@@ -51,10 +51,10 @@ class UploadManager
                 $files = UploadedFile::getInstance($model, $attribute);
                
                 $fileName = uniqid() . '.' . $files->extension;
-                $dir = $this->options->UploadDir . '/' . $this->getUploadDirectory(
+                $dir = Yii::$app->Options->UploadDir . '/' . $this->getUploadDirectory(
                         $model
                     ) . '/' . $fileName;
-                $this->MakeDir($this->options->UploadDir . '/' . $this->getUploadDirectory($model));
+                $this->MakeDir(Yii::$app->Options->UploadDir . '/' . $this->getUploadDirectory($model));
                 if (!empty($this->errors)) {
                     echo '<pre style="direction:ltr">';
                     var_dump($this->errors);
@@ -150,7 +150,7 @@ class UploadManager
         {
             $attribute = $model->$attrName;
 
-            $options = $this->options;
+            $options = Yii::$app->Options;
             $uploadUrl = $options->UploadUrl;
             $uploadDir = $options->UploadDir;
         }
@@ -175,7 +175,7 @@ class UploadManager
 
         /* < check image is exist in public upload folder? > */
         {
-            $uploadPath = $this->options->UploadDir . '/' . $this->getUploadDirectory($model);
+            $uploadPath = Yii::$app->Options->UploadDir . '/' . $this->getUploadDirectory($model);
             $exist = realpath($uploadPath);
             if ($exist) {
 
@@ -263,7 +263,7 @@ class UploadManager
      */
     public function getResizedUrl($path, $fileName, $size = 'default')
     {
-        $options = $this->options;
+        $options = Yii::$app->Options;
         $uploadUrl = $options->UploadUrl;
         $uploadDir = $options->UploadDir;
         /* < Check Generation Size > */
@@ -342,7 +342,7 @@ class UploadManager
      */
     public function getResizedCanvasUrl($path, $fileName, $align, $size = 'default', $background)
     {
-        $options = $this->options;
+        $options = Yii::$app->Options;
         $uploadUrl = $options->UploadUrl;
         $uploadDir = $options->UploadDir;
         /* < Check Generation Size > */
@@ -424,7 +424,7 @@ class UploadManager
      */
     public function getResizedCroped($path, $fileName, $size, $cropAxis)
     {
-        $options = $this->options;
+        $options = Yii::$app->Options;
         $uploadUrl = $options->UploadUrl;
         $uploadDir = $options->UploadDir;
         /* < Check Generation Size > */
@@ -516,8 +516,8 @@ class UploadManager
     public function getFit($path, $fileName, $size, $align = 'center')
     {
         $orgSize=$size;
-        $options = $this->options;
-        $uploadUrl = $this->options->URL.$options->UploadUrl;
+        $options = Yii::$app->Options;
+        $uploadUrl = Yii::$app->Options->URL.$options->UploadUrl;
         $uploadDir = $options->UploadDir;
         $folderName = DIRECTORY_SEPARATOR . 'fit' . DIRECTORY_SEPARATOR;
         /* < Check Generation Size > */
@@ -600,7 +600,7 @@ class UploadManager
 
     private function dowunloadFile($url, $dir, $urlFileName)
     {
-        $options = $this->options;
+        $options = Yii::$app->Options;
         $uploadUrl = $options->UploadUrl;
         $uploadDir = $options->UploadDir;
         $fileContent = file_get_contents($url);
@@ -624,7 +624,7 @@ class UploadManager
     public function getFitFromUrl($url, $path, $size, $align = 'center')
     {
 
-        $options = $this->options;
+        $options = Yii::$app->Options;
         $uploadUrl = $options->UploadUrl;
         $uploadDir = $options->UploadDir;
         $folderName = DIRECTORY_SEPARATOR . 'fit' . DIRECTORY_SEPARATOR;
@@ -709,7 +709,7 @@ class UploadManager
 
 public function changeResolution($fileLocation, $dpi)
     {
-        $options = $this->options;
+        $options = Yii::$app->Options;
         $uploadUrl = $options->UploadUrl;
         $uploadDir = $options->UploadDir;
         $fileLocation=str_replace('\\','/',$fileLocation);
@@ -773,14 +773,14 @@ public function changeResolution($fileLocation, $dpi)
 
     private function generateNoImage($size = 'default', $image = 'noImage.jpg')
     {
-        $uploadPath = $this->options->UploadDir . '/images/noImage.jpg';
+        $uploadPath = Yii::$app->Options->UploadDir . '/images/noImage.jpg';
         $exist = realpath(trim($uploadPath));
         if ($exist) {
 
             /* < Check Generation Size > */
             {
-                $url = $this->options->UploadUrl . '/images/noImage.jpg';
-                $dir = $this->options->UploadDir . '/images/noImage.jpg';
+                $url = Yii::$app->Options->UploadUrl . '/images/noImage.jpg';
+                $dir = Yii::$app->Options->UploadDir . '/images/noImage.jpg';
                 if (!empty($size)) {
                     if ($size == 'default') {
                         return $url;
@@ -799,7 +799,7 @@ public function changeResolution($fileLocation, $dpi)
                             {
                                 /* < parse image name > */
                                 {
-                                    $folderAddress = $this->options->UploadDir . '/images/' . $width . '_' . $heiht;
+                                    $folderAddress = Yii::$app->Options->UploadDir . '/images/' . $width . '_' . $heiht;
                                     $fileAddress = $folderAddress . '/' . $image;
 
                                     /* < Image name folder extraction > */
@@ -821,7 +821,7 @@ public function changeResolution($fileLocation, $dpi)
                                     }
 
 //
-                                    return $this->options->URL . '/' . $this->options->UploadUrl . '/images/' . $width . '_' . $heiht . '/' . $image;
+                                    return Yii::$app->Options->URL . '/' . Yii::$app->Options->UploadUrl . '/images/' . $width . '_' . $heiht . '/' . $image;
                                 }
                                 /* </ parse image name > */
                             }
@@ -839,7 +839,7 @@ public function changeResolution($fileLocation, $dpi)
             }
             /* </ Check Generation Size > */
         } else {
-            $this->MakeDefaultPic($this->options->UploadDir . '/images');
+            $this->MakeDefaultPic(Yii::$app->Options->UploadDir . '/images');
             $this->generateNoImage($size, $image);
         }
     }
