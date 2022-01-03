@@ -18,7 +18,7 @@
     "php": ">=7.2",
     "yiisoft/yii2": "2.*",
     "ext-fileinfo": "*",
-    "yiiman/yii-module-setting": "0.0.2",
+    "yiiman/yii-module-setting": "dev-main",
     "ext-json": "*",
     "ext-gd": "*"
   }
