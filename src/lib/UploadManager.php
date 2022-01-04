@@ -304,15 +304,19 @@ class UploadManager
 
                                 if (!realpath($fileAddress)) {
                                     $dir = str_replace('\\', '/', $dir);
+                                    if (realpath($dir . '/' . $fileName)) {
+                                        $this->imageManager->make($dir . '/' . $fileName)->resize(
+                                            $width,
+                                            $heiht
+                                        )->save($dir . '/' . $width . '_' . $heiht . '/' . $fileName, 100);
+                                        return $uploadUrl . '/' . $path . '/' . $width . '_' . $heiht . '/' . $fileName;
 
-                                    $this->imageManager->make($dir . '/' . $fileName)->resize(
-                                        $width,
-                                        $heiht
-                                    )->save($dir . '/' . $width . '_' . $heiht . '/' . $fileName, 100);
+                                    }else{
+                                        return $this->generateNoImage($width.'*'.$heiht);
+                                    }
                                 }
 
 //
-                                return $uploadUrl . '/' . $path . '/' . $width . '_' . $heiht . '/' . $fileName;
                             }
                             /* </ parse image name > */
                         }
@@ -384,18 +388,22 @@ class UploadManager
 
                                 if (!realpath($fileAddress)) {
                                     $dir = str_replace('\\', '/', $dir);
+                                    if (realpath($dir . '/' . $fileName)) {
+                                        $this->imageManager->make($dir . '/' . $fileName)->resizeCanvas(
+                                            $width,
+                                            $heiht,
+                                            $align,
+                                            false,
+                                            $background
+                                        )->save($dir . '/resizedCanvas/' . $width . '_' . $heiht . '/' . $fileName, 100);
+                                        return $uploadUrl . '/' . $path . '/resizedCanvas/' . $width . '_' . $heiht . '/' . $fileName;
 
-                                    $this->imageManager->make($dir . '/' . $fileName)->resizeCanvas(
-                                        $width,
-                                        $heiht,
-                                        $align,
-                                        false,
-                                        $background
-                                    )->save($dir . '/resizedCanvas/' . $width . '_' . $heiht . '/' . $fileName, 100);
+                                    }else{
+                                        return $this->generateNoImage($width.'*'.$heiht);
+                                    }
                                 }
 
 //
-                                return $uploadUrl . '/' . $path . '/resizedCanvas/' . $width . '_' . $heiht . '/' . $fileName;
                             }
                             /* </ parse image name > */
                         }
@@ -476,17 +484,22 @@ class UploadManager
 
                                 if (!realpath($fileAddress)) {
                                     $dir = str_replace('\\', '/', $dir);
+                                    if (realpath($dir . '/' . $fileName)) {
+                                        $this->imageManager->make($dir . '/' . $fileName)->crop(
+                                            $width,
+                                            $heiht,
+                                            $x,
+                                            $y
+                                        )->save($dir . '/croped/' . $width . '_' . $heiht . '/' . $fileName, 100);
 
-                                    $this->imageManager->make($dir . '/' . $fileName)->crop(
-                                        $width,
-                                        $heiht,
-                                        $x,
-                                        $y
-                                    )->save($dir . '/croped/' . $width . '_' . $heiht . '/' . $fileName, 100);
+                                        return $uploadUrl . '/' . $path . '/croped/' . $width . '_' . $heiht . '/' . $fileName;
+
+                                    }else{
+                                        return $this->generateNoImage($width . '*' . $heiht);
+                                    }
                                 }
 
 //
-                                return $uploadUrl . '/' . $path . '/croped/' . $width . '_' . $heiht . '/' . $fileName;
                             }
                             /* </ parse image name > */
                         }
