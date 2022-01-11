@@ -91,46 +91,7 @@ class UploadManager
 
 
         if (empty($exist)) {
-            $chunkedDir = explode('/', $dir);
-            if (count($chunkedDir) > 1 && $fullPath) {
-                $mkDirectory = '';
-                foreach ($chunkedDir as $item) {
-                    if (!empty($mkDirectory)) {
-                        $mkDirectory .= '/' . $item;
-                    } else {
-                        $mkDirectory = $item;
-                    }
-                    $this->MakeDir($mkDirectory, false);
-                }
-            } else if ($fullPath) {
-                throw new BadMethodCallException(
-                    'Your Upload Directory Settings Is Invalid, Please Set On Settings Menu'
-                );
-            } else {
-                $mkDir = true;
-                if (PHP_OS == 'Linux') {
-                    if (empty(realpath('/' . $dir))) {
-
-
-                        $mkDir = mkdir('/' . $dir, 0775);
-                        chmod('/' . $dir, 0755);
-                    }
-                } else {
-                    if (empty(realpath($dir))) {
-                        $mkDir = mkdir($dir, 0755);
-                        if (PHP_OS == 'Linux') {
-
-                            chmod('/' . $dir, 0755);
-                        } else {
-                            chmod($dir, 0755);
-                        }
-                    }
-
-                }
-                if (!$mkDir) {
-                    $this->errors[] = ['error in make directory', 'directory' => $dir];
-                }
-            }
+            @mkdir($dir,0777,true);
         }
     }
 
@@ -202,15 +163,15 @@ class UploadManager
                                 {
                                     /* < parse image name > */
                                     {
-                                        $folderAddress = $dir . '/' . $width . '_' . $heiht;
+                                        $folderAddress = $dir . '/sized/' . $width . '_' . $heiht;
                                         $fileAddress = $uploadUrl . '/' . $this->getUploadDirectory(
                                                 $model
-                                            ) . '/' . $width . '_' . $heiht . '/' . $image;
+                                            ) . '/sized/' . $width . '_' . $heiht . '/' . $image;
 
                                         /* < Image name folder extraction > */
                                         {
                                             if (!realpath($folderAddress)) {
-                                                @mkdir($folderAddress);
+                                                @mkdir($folderAddress,0777,true);
                                             }
 
                                         }
@@ -223,13 +184,13 @@ class UploadManager
                                             $this->imageManager->make($dir . '/' . $image)->resize(
                                                 $width,
                                                 $heiht
-                                            )->save($dir . '/' . $width . '_' . $heiht . '/' . $image, 100);
+                                            )->save($dir . '/sized/' . $width . '_' . $heiht . '/' . $image, 100);
                                         }
 
 //
                                         return $uploadUrl . '/' . $this->getUploadDirectory(
                                                 $model
-                                            ) . '/' . $width . '_' . $heiht . '/' . $image;
+                                            ) . '/sized/' . $width . '_' . $heiht . '/' . $image;
                                     }
                                     /* </ parse image name > */
                                 }
@@ -289,13 +250,13 @@ class UploadManager
                         {
                             /* < parse image name > */
                             {
-                                $folderAddress = $dir . '/' . $width . '_' . $heiht;
-                                $fileAddress = $dir . '/' . $width . '_' . $heiht . '/' . $fileName;
+                                $folderAddress = $dir . '/sized/' . $width . '_' . $heiht;
+                                $fileAddress = $dir . '/sized/' . $width . '_' . $heiht . '/' . $fileName;
 
                                 /* < Image name folder extraction > */
                                 {
                                     if (!realpath($folderAddress)) {
-                                        @mkdir($folderAddress);
+                                        @mkdir($folderAddress,0777,true);
                                     }
 
                                 }
@@ -308,8 +269,8 @@ class UploadManager
                                         $this->imageManager->make($dir . '/' . $fileName)->resize(
                                             $width,
                                             $heiht
-                                        )->save($dir . '/' . $width . '_' . $heiht . '/' . $fileName, 100);
-                                        return $uploadUrl . '/' . $path . '/' . $width . '_' . $heiht . '/' . $fileName;
+                                        )->save($dir . '/sized/' . $width . '_' . $heiht . '/' . $fileName, 100);
+                                        return $uploadUrl . '/' . $path . '/sized/' . $width . '_' . $heiht . '/' . $fileName;
 
                                     }else{
                                         return $this->generateNoImage($width.'*'.$heiht);
@@ -372,8 +333,8 @@ class UploadManager
                         {
                             /* < parse image name > */
                             {
-                                $folderAddress = $dir . '/resizedCanvas/' . $width . '_' . $heiht;
-                                $fileAddress = $dir . '/resizedCanvas/' . $width . '_' . $heiht . '/' . $fileName;
+                                $folderAddress = $dir . '/sized/resizedCanvas/' . $width . '_' . $heiht;
+                                $fileAddress = $dir . '/sized/resizedCanvas/' . $width . '_' . $heiht . '/' . $fileName;
 
                                 /* < Image name folder extraction > */
                                 {
@@ -395,8 +356,8 @@ class UploadManager
                                             $align,
                                             false,
                                             $background
-                                        )->save($dir . '/resizedCanvas/' . $width . '_' . $heiht . '/' . $fileName, 100);
-                                        return $uploadUrl . '/' . $path . '/resizedCanvas/' . $width . '_' . $heiht . '/' . $fileName;
+                                        )->save($dir . '/sized/resizedCanvas/' . $width . '_' . $heiht . '/' . $fileName, 100);
+                                        return $uploadUrl . '/' . $path . '/sized/resizedCanvas/' . $width . '_' . $heiht . '/' . $fileName;
 
                                     }else{
                                         return $this->generateNoImage($width.'*'.$heiht);
@@ -468,8 +429,8 @@ class UploadManager
                         {
                             /* < parse image name > */
                             {
-                                $folderAddress = $dir . '/croped/' . $width . '_' . $heiht;
-                                $fileAddress = $dir . '/croped/' . $width . '_' . $heiht . '/' . $fileName;
+                                $folderAddress = $dir . '/sized/croped/' . $width . '_' . $heiht;
+                                $fileAddress = $dir . '/sized/croped/' . $width . '_' . $heiht . '/' . $fileName;
 
                                 /* < Image name folder extraction > */
                                 {
@@ -490,9 +451,9 @@ class UploadManager
                                             $heiht,
                                             $x,
                                             $y
-                                        )->save($dir . '/croped/' . $width . '_' . $heiht . '/' . $fileName, 100);
+                                        )->save($dir . '/sized/croped/' . $width . '_' . $heiht . '/' . $fileName, 100);
 
-                                        return $uploadUrl . '/' . $path . '/croped/' . $width . '_' . $heiht . '/' . $fileName;
+                                        return $uploadUrl . '/' . $path . '/sized/croped/' . $width . '_' . $heiht . '/' . $fileName;
 
                                     }else{
                                         return $this->generateNoImage($width . '*' . $heiht);
@@ -530,9 +491,9 @@ class UploadManager
     {
         $orgSize=$size;
         $options = Yii::$app->Options;
-        $uploadUrl = Yii::$app->Options->URL.$options->UploadUrl;
+        $uploadUrl = $options->UploadUrl;
         $uploadDir = $options->UploadDir;
-        $folderName = DIRECTORY_SEPARATOR . 'fit' . DIRECTORY_SEPARATOR;
+        $folderName = DIRECTORY_SEPARATOR.'sized'.DIRECTORY_SEPARATOR . 'fit' . DIRECTORY_SEPARATOR;
         /* < Check Generation Size > */
         {
             $url = $uploadUrl . '/' . $path . '/' . $fileName;
@@ -560,7 +521,7 @@ class UploadManager
                         {
                             /* < parse image name > */
                             {
-                                $folderAddress = $dir . $folderName . $width . '_' . $heiht;
+                                $folderAddress = $dir . $folderName .$width . '_' . $heiht;
                                 $fileAddress = $dir . $folderName . $width . '_' . $heiht . '/' . $fileName;
 
                                 /* < Image name folder extraction > */
@@ -640,7 +601,7 @@ class UploadManager
         $options = Yii::$app->Options;
         $uploadUrl = $options->UploadUrl;
         $uploadDir = $options->UploadDir;
-        $folderName = DIRECTORY_SEPARATOR . 'fit' . DIRECTORY_SEPARATOR;
+        $folderName = DIRECTORY_SEPARATOR.'sized'.DIRECTORY_SEPARATOR . 'fit' . DIRECTORY_SEPARATOR;
 
         $explodes = explode('/', $url);
         $urlFileName = $explodes[count($explodes) - 1];
@@ -752,7 +713,7 @@ public function changeResolution($fileLocation, $dpi)
             {
                 /* < parse image name > */
                 {
-                    $folderAddress = $filePath .'/' . $dpi.'DPI';
+                    $folderAddress = $filePath .DIRECTORY_SEPARATOR.'sized'.DIRECTORY_SEPARATOR . $dpi.'DPI';
 
                     /* < Image name folder extraction > */
                     {
@@ -812,13 +773,13 @@ public function changeResolution($fileLocation, $dpi)
                             {
                                 /* < parse image name > */
                                 {
-                                    $folderAddress = Yii::$app->Options->UploadDir . '/images/' . $width . '_' . $heiht;
+                                    $folderAddress = Yii::$app->Options->UploadDir . '/images/sized/' . $width . '_' . $heiht;
                                     $fileAddress = $folderAddress . '/' . $image;
 
                                     /* < Image name folder extraction > */
                                     {
                                         if (!realpath($folderAddress)) {
-                                            @mkdir($folderAddress);
+                                            @mkdir($folderAddress,0777,true);
                                         }
 
                                     }
@@ -834,7 +795,7 @@ public function changeResolution($fileLocation, $dpi)
                                     }
 
 //
-                                    return Yii::$app->Options->URL . '/' . Yii::$app->Options->UploadUrl . '/images/' . $width . '_' . $heiht . '/' . $image;
+                                    return Yii::$app->Options->UploadUrl . '/images/sized/' . $width . '_' . $heiht . '/' . $image;
                                 }
                                 /* </ parse image name > */
                             }
@@ -890,7 +851,7 @@ public function changeResolution($fileLocation, $dpi)
         $dir=str_replace(['/','\\'],DIRECTORY_SEPARATOR,$dir);
 
         if (!realpath($dir)) {
-            @mkdir($dir, true);
+            @mkdir($dir,0777, true);
         }
         $noImage=trim($dir .DIRECTORY_SEPARATOR. 'noImage.jpg');
         if (!file_exists($noImage)){
